@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+/*
+Примечание:
+Класс почти полностью готов, пока не реализованы методы обработки событий связанный с 10% здоровья из первой части задания.
+А также нет реализации инвентаря (пока в раздумьях, как его лучше сделать).
+*/
+namespace GameProject
+{
+    enum race { human, gnome, elf, orc, goblin };
+    enum state { normal, weakened, sick, poisoned, paralyzed, dead };
+    class Person : IComparable
+    {
+        /// <summary>
+        /// Статическая переменная, отображающая текущий свободный ID
+        /// </summary>
+        static public int MID;
+        /// <summary>
+        /// Уникальный код персонажа только для чтения
+        /// </summary>
+        /// <summary>
+        /// Свойства доступа к id персонажа
+        /// </summary>
+        public int ID
+        {
+            get;
+        }
+        /// <summary>
+        /// Имя персонажа только для чтения
+        /// </summary>
+        public string name { get; }
+        /// <summary>
+        /// Пол персонажа только для чтения (true - мужской, false - женский)
+        /// </summary>
+        public bool gender { get; }
+        /// <summary>
+        /// Раса персонажа только для чтения
+        /// </summary>
+        public race Race { get; }
+        /// <summary>
+        /// Состояние персонажа
+        /// </summary>
+        public state State { get; set; }
+        /// <summary>
+        /// Возможность разговаривать (true - может, false - не может)
+        /// </summary>
+        public bool can_talk { get; set; }
+        /// <summary>
+        /// Возможность двигаться (true - может, false - не может)
+        /// </summary>
+        public bool can_move { get; set; }
+        /// <summary>
+        /// Возраст персонажа
+        /// </summary>
+        public int age { get; set; }
+        /// <summary>
+        /// Здоровье (величина неотрицательная)
+        /// </summary>
+        public uint health { get; set; }
+        /// <summary>
+        /// Максимальное здоровье (величина неотрицательная)
+        /// </summary>
+        public uint max_health { get; set; }
+        /// <summary>
+        /// Опыт
+        /// </summary>
+        public uint exp { get; set; }
+        public Person(string name = "Дементий", bool gender = true, race Race = race.human)
+        {
+            ID = ++MID;
+            this.name = name;
+            this.gender = gender;
+            this.Race = Race;
+        }
+        /// <summary>
+        /// Реализация интерфейса Icomparable
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            Person otherPerson = obj as Person;
+            if (otherPerson != null)
+                return this.exp.CompareTo(otherPerson.exp);
+            else
+                throw new ArgumentException("Сравнение с неверным объектом");
+        }
+        /// <summary>
+        /// Перегруженный метод ToString()
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string Sex;
+            if (this.gender == true)
+            {
+                Sex = "мужской";
+            }
+            else
+            {
+                Sex = "женский";
+            }
+            return ("Персонаж по имени " + this.name + " расы " + this.Race.ToString() + " имеет:\n1)Пол - " + Sex + "\n2)Здоровье - " + this.health.ToString() + "\n3)Опыт - " + this.exp.ToString());
+        }
+    }
+}
